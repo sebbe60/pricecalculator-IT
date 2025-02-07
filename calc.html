@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Price Calculator</title> 
+    <style>
+        /* Namespace all styles to #price-calculator-wrapper */ 
+        #price-calculator-wrapper {
+            font-family: 'Inter', Arial, sans-serif !important;
+            background-color: #fff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+            box-sizing: border-box;
+        }
+
+        #price-calculator-wrapper * {
+            all: unset;
+            display: revert;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif !important;
+        }
+
+        #price-calculator-wrapper h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333 !important;
+        }
+
+        #price-calculator-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        #price-calculator-wrapper .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        #price-calculator-wrapper .form-group select,
+        #price-calculator-wrapper .form-group input,
+        #price-calculator-wrapper .form-group textarea {
+            width: 96%;
+            padding: 12px;
+            font-size: 1rem !important;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            appearance: none;
+            background-color: #fff;
+            color: #333 !important;
+            font-family: 'Inter', Arial, sans-serif !important;
+        }
+
+        #price-calculator-wrapper .form-group textarea {
+            resize: none;
+        }
+
+        #price-calculator-wrapper .form-group label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: #fff;
+            padding: 0 5px;
+            font-size: 0.85rem;
+            color: #555 !important;
+        }
+
+        #price-calculator-wrapper #price-display {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            font-size: 1rem !important;
+            text-align: left;
+        }
+
+        #price-calculator-wrapper .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        #price-calculator-wrapper .price-row span {
+            font-weight: bold !important;
+        }
+
+        /* Adjusted CSS for messages */
+        #price-calculator-wrapper .message {
+            font-style: italic;
+            color: #555;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            font-size: 0.85rem !important;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        /* Decrease font size specifically for the unlimited info text */
+        #price-calculator-wrapper #unlimited-message {
+            font-size: 0.75rem !important;
+        }
+
+        #price-calculator-wrapper button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem !important;
+            font-weight: bold !important;
+            color: #fff !important;
+            background-color: #000 !important;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #price-calculator-wrapper button:hover {
+            background-color: #333 !important;
+        }
+
+        #price-calculator-wrapper #confirmation {
+            color: #333 !important;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Styles for the confirmation message title */
+        #price-calculator-wrapper #confirmation h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #333 !important;
+        }
+
+        #price-calculator-wrapper #confirmation p {
+            font-size: 1.2rem;
+            color: #333 !important;
+        }
+
+        /* Additional styles to maintain layout */
+        #price-calculator-form {
+            box-sizing: border-box;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+
+    <div id="price-calculator-wrapper">
+        <h2>Price Calculator</h2>
+
+        <div id="price-calculator-form">
+            <!-- Location Dropdown -->
+            <div class="form-group">
+                <label for="location">Select Home Location</label>
+                <select id="location" name="location" required>
+                    <option value="">-- Select Home Location --</option>
+                    <option value="palma-de-mallorca">Palma de Mallorca</option>
+                    <option value="stockholm">Stockholm</option>
+                    <option value="marbella">Marbella</option>
+                    <option value="menorca">Menorca</option>
+                    <option value="malta">Malta</option>
+                    <option value="cancun">Cancun</option>
+                    <option value="ibiza">Ibiza</option>
+                    <option value="costa-brava">Costa Brava</option>
+                    <option value="st-tropez">St Tropez</option>
+                    <option value="corsica">Corsica</option>
+                    <option value="la-spezia">La Spezia</option>
+                    <option value="jersey">Jersey</option>
+                    <option value="uk">UK</option>
+                    <option value="amsterdam">Amsterdam</option>
+                    <option value="bonaire">Bonaire</option>
+                </select>
+            </div>
+
+            <!-- Membership Dropdown -->
+            <div class="form-group">
+                <label for="membership">Select Membership</label>
+                <select id="membership" name="membership" required>
+                    <option value="">-- Select Membership --</option>
+                    <option value="unlimited-boating">Unlimited Boating</option>
+                    <option value="on-demand-boating">On Demand Boating</option>
+                </select>
+            </div>
+
+            <!-- Category Dropdown -->
+            <div class="form-group" id="category-group" style="display:none;">
+                <label for="category">Select Boat Category</label>
+                <select id="category" name="category" required>
+                    <option value="">-- Select Category --</option>
+                </select>
+            </div>
+
+            <!-- Package Dropdown -->
+            <div class="form-group" id="package-group" style="display:none;">
+                <label for="package">Select Package</label>
+                <select id="package" name="package" required>
+                    <option value="">-- Select Package --</option>
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+
+            <!-- Information Messages -->
+            <div class="message" id="on-demand-message" style="display:none;"></div>
+            <div class="message" id="unlimited-message" style="display:none;"></div>
+
+            <!-- Price Display -->
+            <div id="price-display" style="display:none;">
+                <div class="price-row">
+                    <span>Price:</span>
+                    <span><span id="price"></span> <span id="currency"></span></span>
+                </div>
+            </div>
+
+            <!-- Contact Form Section -->
+            <div id="contact-form">
+                <style>
+                    #specific-h3 {
+                        font-weight: bold;
+                    }
+                </style>
+                <br>
+                <h3 id="specific-h3">Looking for your dream boating life? Get in touch!</h3>
+
+                <!-- Hidden Field for Lead Source -->
+<input type="hidden" id="lead-source" name="lead_source" value="Configurator">
+
+
+                <br>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                     <span id="name-error" style="color: red; font-size: 0.85rem; display: none;">Required</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                     <span id="email-error" style="color: red; font-size: 0.85rem; display: none;">Required</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Optional Message</label>
+                    <textarea id="message" name="message"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="button" id="submit-button">Submit</button>
+            </div>
+
+            <!-- Confirmation Message -->
+            <div id="confirmation" style="display:none;">
+                <h2>Thank You!</h2>
+                <p>Thank you for your interest in Agapi Boat Club.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        emailjs.init("N8GnSWP_076dvhjKN");
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const wrapper = document.getElementById('price-calculator-wrapper');
+            const locationSelect = wrapper.querySelector('#location');
+            const membershipSelect = wrapper.querySelector('#membership');
+            const categoryGroup = wrapper.querySelector('#category-group');
+            const categorySelect = wrapper.querySelector('#category');
+            const packageGroup = wrapper.querySelector('#package-group');
+            const packageSelect = wrapper.querySelector('#package');
+            const priceDisplay = wrapper.querySelector('#price-display');
+            const priceSpan = wrapper.querySelector('#price');
+            const currencySpan = wrapper.querySelector('#currency');
+            const onDemandMessage = wrapper.querySelector('#on-demand-message');
+            const unlimitedMessage = wrapper.querySelector('#unlimited-message');
+            const confirmation = wrapper.querySelector("#confirmation");
+            const contactForm = wrapper.querySelector('#contact-form');
+            const leadSourceField = wrapper.querySelector('#lead-source');
+
+            const prices = {
+                "palma-de-mallorca": {
+                    "unlimited-boating": {
+                        "boat-category-a": 7000,
+                        "boat-category-b": 9900,
+                        "boat-category-c": 17000,
+                        "boat-category-d": 25000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "stockholm": {
+                    "unlimited-boating": {
+                        "boat-category-a": 55000,
+                        "boat-category-b": 95000,
+                        "boat-category-c": 150000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 10000,
+                        "PayGo-package": 30000
+                    }
+                },
+                "marbella": {
+                    "unlimited-boating": {
+                        "boat-category-c": 19000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 7000
+                    }
+                },
+                "menorca": {
+                    "unlimited-boating": {
+                        "boat-category-b": 14995
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1945
+                        // Only PayGo Membership available
+                    }
+                },
+                "malta": {
+                    "unlimited-boating": {
+                        "boat-category-b": 12000,
+                        "boat-category-c": 21000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 4200
+                    }
+                },
+                "cancun": {
+                    "unlimited-boating": {
+                        "boat-category-c": 17000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "ibiza": {
+                    "unlimited-boating": {
+                        "boat-category-c": null
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "costa-brava": {
+                    "unlimited-boating": {
+                        "boat-category-a": 8000,
+                        "boat-category-b": 12000,
+                        "boat-category-c": 20000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "st-tropez": {
+                    "unlimited-boating": {
+                        "boat-category-a": 8000,
+                        "boat-category-b": 12000,
+                        "boat-category-c": 21000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "corsica": {
+                    "unlimited-boating": {
+                        "boat-category-b": 14000,
+                        "boat-category-c": 23500,
+                        "boat-category-d": 47700
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "la-spezia": {
+                    "unlimited-boating": {
+                        "boat-category-a": 7000,
+                        "boat-category-b": 10000,
+                        "boat-category-c": 23000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "jersey": {
+                    "unlimited-boating": {
+                        "boat-category-a": 8500,
+                        "boat-category-b": 12000,
+                        "boat-category-c": 20000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "uk": {
+                    "unlimited-boating": {
+                        "boat-category-a": null,
+                        "boat-category-b": null,
+                        "boat-category-c": null
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000
+                        // Only PayGo Membership available
+                    }
+                },
+                "amsterdam": {
+                    "unlimited-boating": {
+                        "boat-category-a": 5000,
+                        "boat-category-b": 9000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                },
+                "bonaire": {
+                    "unlimited-boating": {
+                        "boat-category-a": 9000,
+                        "boat-category-b": 11500,
+                        "boat-category-c": 18700,
+                        "boat-category-d": 40000
+                    },
+                    "on-demand-boating": {
+                        "PayGo-membership": 1000,
+                        "PayGo-package": 3000
+                    }
+                }
+            };
+
+            const currencies = {
+                "palma-de-mallorca": "EUR",
+                "stockholm": "SEK",
+                "marbella": "EUR",
+                "menorca": "EUR",
+                "malta": "EUR",
+                "cancun": "EUR",
+                "ibiza": "EUR",
+                "costa-brava": "EUR",
+                "st-tropez": "EUR",
+                "corsica": "EUR",
+                "la-spezia": "EUR",
+                "jersey": "GBP",
+                "uk": "GBP",
+                "amsterdam": "EUR",
+                "bonaire": "USD"
+            };
+
+            function formatNumberWithSpaces(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            }
+
+            function getPackageDisplayName(pkg) {
+                // Provide a friendly display name for packages
+                if (pkg === "PayGo-membership") {
+                    return "PayGo Only Membership";
+                } else if (pkg === "PayGo-package") {
+                    return "PayGo Package";
+                } else {
+                    return pkg.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                }
+            }
+
+            function updateOnDemandMessage(packageSelected) {
+                onDemandMessage.style.display = "none";
+
+                if (!packageSelected) {
+                    return;
+                }
+
+                let additionalMessage = "";
+                if (packageSelected === "PayGo-membership") {
+                    // Full original text for PayGo Only Membership
+                    additionalMessage = "Price for PayGo Membership fee applies to all Boat Categories and includes Onboarding.";
+                } else if (packageSelected === "PayGo-package") {
+                    // Full text for PayGo Package
+                    additionalMessage = "Price for PayGo memberships applies to all Boat Categories. Price package for boat trips including Membership fee and Onboarding free of charge.";
+                }
+
+                onDemandMessage.innerHTML = additionalMessage;
+                onDemandMessage.style.display = additionalMessage ? "block" : "none";
+            }
+
+            function updateCategories() {
+                const location = locationSelect.value;
+                const membership = membershipSelect.value;
+
+                // Hide messages initially
+                unlimitedMessage.style.display = "none";
+                onDemandMessage.style.display = "none";
+
+                categorySelect.innerHTML = '<option value="">-- Select Category --</option>';
+                packageSelect.innerHTML = '<option value="">-- Select Package --</option>';
+                categoryGroup.style.display = "none";
+                packageGroup.style.display = "none";
+                priceDisplay.style.display = "none";
+
+                if (membership === "on-demand-boating") {
+                    const availablePackages = prices[location]?.[membership];
+                    if (availablePackages) {
+                        const packages = Object.keys(availablePackages).filter(pkg => availablePackages[pkg] !== undefined);
+                        if (packages.length === 1) {
+                            // Only one package available
+                            packageGroup.style.display = "none";
+                            packageSelect.value = packages[0];
+                            updateOnDemandMessage(packages[0]);
+                            updatePrice();
+                        } else if (packages.length > 1) {
+                            packageGroup.style.display = "block";
+                            for (const pkg of packages) {
+                                const option = document.createElement("option");
+                                option.value = pkg;
+                                option.textContent = getPackageDisplayName(pkg);
+                                packageSelect.appendChild(option);
+                            }
+                        }
+                    } else {
+                        packageGroup.style.display = "none";
+                    }
+                } else if (membership === "unlimited-boating") {
+                    // Show unlimited message
+                    unlimitedMessage.style.display = "block";
+                    unlimitedMessage.innerHTML = "We offer special prices for Dual-homes, Only summer, Only weekdays or Off-season.";
+                    // Show category group if options are available
+                    if (prices[location]?.[membership]) {
+                        categoryGroup.style.display = "block";
+                        const availableCategories = prices[location][membership];
+                        for (const category in availableCategories) {
+                            const option = document.createElement("option");
+                            option.value = category;
+                            option.textContent = category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                            categorySelect.appendChild(option);
+                        }
+                    } else {
+                        categoryGroup.style.display = "none";
+                    }
+                }
+            }
+
+            function updatePrice() {
+                const location = locationSelect.value;
+                const membership = membershipSelect.value;
+
+                if (membership === "on-demand-boating") {
+                    const packageSelected = packageSelect.value;
+                    const availablePackages = prices[location]?.[membership];
+                    if (location && (packageSelected || (availablePackages && Object.keys(availablePackages).length === 1))) {
+                        const selectedPackage = packageSelected || Object.keys(availablePackages)[0];
+                        updateOnDemandMessage(selectedPackage);
+                        const price = prices[location]?.[membership]?.[selectedPackage];
+                        if (price === null) {
+                            priceSpan.textContent = "Prices for 2025 available soon";
+                            currencySpan.textContent = "";
+                            priceDisplay.style.display = 'block';
+                        } else if (price) {
+                            priceSpan.textContent = formatNumberWithSpaces(price);
+                            currencySpan.textContent = currencies[location];
+                            priceDisplay.style.display = 'block';
+                        } else {
+                            priceDisplay.style.display = 'none';
+                        }
+                    } else {
+                        priceDisplay.style.display = 'none';
+                    }
+                } else if (membership === "unlimited-boating") {
+                    const category = categorySelect.value;
+                    if (location && category) {
+                        const price = prices[location]?.[membership]?.[category];
+                        if (price === null) {
+                            priceSpan.textContent = "Prices for 2025 available soon";
+                            currencySpan.textContent = "";
+                            priceDisplay.style.display = 'block';
+                        } else if (price) {
+                            priceSpan.textContent = formatNumberWithSpaces(price);
+                            currencySpan.textContent = currencies[location];
+                            priceDisplay.style.display = 'block';
+                        } else {
+                            priceDisplay.style.display = 'none';
+                        }
+                    } else {
+                        priceDisplay.style.display = 'none';
+                    }
+                } else {
+                    priceDisplay.style.display = 'none';
+                }
+            }
+
+            const submitButton = wrapper.querySelector("#submit-button");
+
+            submitButton.addEventListener("click", function () {
+    const nameField = wrapper.querySelector("#name");
+    const emailField = wrapper.querySelector("#email");
+    const messageField = wrapper.querySelector("#message");
+    const locationField = wrapper.querySelector("#location");
+    const membershipField = wrapper.querySelector("#membership");
+    const categoryField = wrapper.querySelector("#category");
+    const packageField = wrapper.querySelector("#package");
+    const priceField = priceSpan.textContent;
+    const currencyField = currencySpan.textContent;
+    const leadSourceField = wrapper.querySelector("#lead-source");
+
+    // Basic validation
+    if (!nameField.value.trim() || !emailField.value.trim()) {
+        // Display errors (optional inline error handling can be added here)
+        return;
+    }
+
+    // Data to send
+    const formData = {
+        name: nameField.value.trim(),
+        email: emailField.value.trim(),
+        message: messageField ? messageField.value.trim() : "",
+        location: locationField.value,
+        membership: membershipField.value,
+        category: categoryField ? categoryField.value : "",
+        package: packageField ? packageField.value : "",
+        price: priceField ? priceField : "",
+        currency: currencyField ? currencyField : "",
+        lead_source: leadSourceField.value
+    };
+
+    // Send to Make.com webhook
+    fetch("https://hook.eu2.make.com/yh6gymw330shtcvjgiszzw1iyyozezbl", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    }).then(response => {
+        if (response.ok) {
+            console.log("Form data sent to Make.com successfully.");
+        } else {
+            console.error("Failed to send form data to Make.com.");
+        }
+    }).catch(error => console.error("Error sending data to Make.com:", error));
+
+    // Continue with EmailJS logic
+    emailjs.send("service_bp6qapf", "template_oymlxox", formData).then(
+        function () {
+            contactForm.style.display = 'none';
+            confirmation.style.display = 'block';
+        },
+        function (error) {
+            console.error("Failed to send email:", error);
+        }
+    );
+});
+
+
+
+            locationSelect.addEventListener('change', updateCategories);
+            membershipSelect.addEventListener('change', updateCategories);
+            categorySelect.addEventListener('change', updatePrice);
+            packageSelect.addEventListener('change', function() {
+                updateOnDemandMessage(packageSelect.value);
+                updatePrice();
+            });
+        });
+    </script>
+
+</body>
+</html>
