@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Price Calculator</title> 
+    <title>Calcolatore di Prezzi</title> 
     <style>
         /* Namespace all styles to #price-calculator-wrapper */ 
         #price-calculator-wrapper {
@@ -156,27 +156,27 @@
 <body>
 
     <div id="price-calculator-wrapper">
-        <h2>Price Calculator</h2>
+        <h2>Calcolatore di Prezzi</h2>
 
         <div id="price-calculator-form">
             <!-- Location Dropdown -->
             <div class="form-group">
-                <label for="location">Select Home Location</label>
+                <label for="location">Seleziona la posizione della casa</label>
                 <select id="location" name="location" required>
-                    <option value="">-- Select Home Location --</option>
+                    <option value="">-- Seleziona la posizione della casa --</option>
                     <option value="palma-de-mallorca">Palma de Mallorca</option>
                     <option value="stockholm">Stockholm</option>
                     <option value="marbella">Marbella</option>
                     <option value="menorca">Menorca</option>
                     <option value="malta">Malta</option>
-                    <option value="cancun">Cancun</option>
+                    <option value="cancun">Cancún</option>
                     <option value="ibiza">Ibiza</option>
                     <option value="costa-brava">Costa Brava</option>
-                    <option value="st-tropez">St Tropez</option>
+                    <option value="st-tropez">Saint-Tropez</option>
                     <option value="corsica">Corsica</option>
                     <option value="la-spezia">La Spezia</option>
                     <option value="jersey">Jersey</option>
-                    <option value="uk">UK</option>
+                    <option value="uk">Regno Unito</option>
                     <option value="amsterdam">Amsterdam</option>
                     <option value="bonaire">Bonaire</option>
                 </select>
@@ -184,27 +184,27 @@
 
             <!-- Membership Dropdown -->
             <div class="form-group">
-                <label for="membership">Select Membership</label>
+                <label for="membership">Seleziona l'abbonamento</label>
                 <select id="membership" name="membership" required>
-                    <option value="">-- Select Membership --</option>
-                    <option value="unlimited-boating">Unlimited Boating</option>
-                    <option value="on-demand-boating">On Demand Boating</option>
+                    <option value="">-- Seleziona l'abbonamento --</option>
+                    <option value="unlimited-boating">Navigazione illimitata</option>
+                    <option value="on-demand-boating">Navigazione su richiesta</option>
                 </select>
             </div>
 
             <!-- Category Dropdown -->
             <div class="form-group" id="category-group" style="display:none;">
-                <label for="category">Select Boat Category</label>
+                <label for="category">Seleziona la categoria della barca</label>
                 <select id="category" name="category" required>
-                    <option value="">-- Select Category --</option>
+                    <option value="">-- Seleziona la categoria --</option>
                 </select>
             </div>
 
             <!-- Package Dropdown -->
             <div class="form-group" id="package-group" style="display:none;">
-                <label for="package">Select Package</label>
+                <label for="package">Seleziona il pacchetto</label>
                 <select id="package" name="package" required>
-                    <option value="">-- Select Package --</option>
+                    <option value="">-- Seleziona il pacchetto --</option>
                     <!-- Options will be populated dynamically -->
                 </select>
             </div>
@@ -216,7 +216,7 @@
             <!-- Price Display -->
             <div id="price-display" style="display:none;">
                 <div class="price-row">
-                    <span>Price:</span>
+                    <span>Prezzo:</span>
                     <span><span id="price"></span> <span id="currency"></span></span>
                 </div>
             </div>
@@ -229,38 +229,37 @@
                     }
                 </style>
                 <br>
-                <h3 id="specific-h3">Looking for your dream boating life? Get in touch!</h3>
+                <h3 id="specific-h3">Cerchi la vita nautica dei tuoi sogni? Contattaci!</h3>
 
                 <!-- Hidden Field for Lead Source -->
-<input type="hidden" id="lead-source" name="lead_source" value="Configurator">
-
+                <input type="hidden" id="lead-source" name="lead_source" value="Configuratore">
 
                 <br>
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Nome</label>
                     <input type="text" id="name" name="name" required>
-                     <span id="name-error" style="color: red; font-size: 0.85rem; display: none;">Required</span>
+                     <span id="name-error" style="color: red; font-size: 0.85rem; display: none;">Obbligatorio</span>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
-                     <span id="email-error" style="color: red; font-size: 0.85rem; display: none;">Required</span>
+                     <span id="email-error" style="color: red; font-size: 0.85rem; display: none;">Obbligatorio</span>
                 </div>
 
                 <div class="form-group">
-                    <label for="message">Optional Message</label>
+                    <label for="message">Messaggio opzionale</label>
                     <textarea id="message" name="message"></textarea>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="button" id="submit-button">Submit</button>
+                <button type="button" id="submit-button">Invia</button>
             </div>
 
             <!-- Confirmation Message -->
             <div id="confirmation" style="display:none;">
-                <h2>Thank You!</h2>
-                <p>Thank you for your interest in Agapi Boat Club.</p>
+                <h2>Grazie!</h2>
+                <p>Grazie per il tuo interesse per Agapi Boat Club.</p>
             </div>
         </div>
     </div>
@@ -487,11 +486,9 @@
 
                 let additionalMessage = "";
                 if (packageSelected === "PayGo-membership") {
-                    // Full original text for PayGo Only Membership
-                    additionalMessage = "Price for PayGo Membership fee applies to all Boat Categories and includes Onboarding.";
+                    additionalMessage = "Il prezzo della quota di adesione PayGo si applica a tutte le categorie di barca e include l'onboarding.";
                 } else if (packageSelected === "PayGo-package") {
-                    // Full text for PayGo Package
-                    additionalMessage = "Price for PayGo memberships applies to all Boat Categories. Price package for boat trips including Membership fee and Onboarding free of charge.";
+                    additionalMessage = "Il prezzo delle adesioni PayGo si applica a tutte le categorie di barca. Il pacchetto per le uscite in barca include la quota di adesione e l'onboarding gratuito.";
                 }
 
                 onDemandMessage.innerHTML = additionalMessage;
@@ -537,7 +534,7 @@
                 } else if (membership === "unlimited-boating") {
                     // Show unlimited message
                     unlimitedMessage.style.display = "block";
-                    unlimitedMessage.innerHTML = "We offer special prices for Dual-homes, Only summer, Only weekdays or Off-season.";
+                    unlimitedMessage.innerHTML = "Offriamo prezzi speciali per case doppie, solo estate, solo durante la settimana o fuori stagione.";
                     // Show category group if options are available
                     if (prices[location]?.[membership]) {
                         categoryGroup.style.display = "block";
@@ -566,7 +563,7 @@
                         updateOnDemandMessage(selectedPackage);
                         const price = prices[location]?.[membership]?.[selectedPackage];
                         if (price === null) {
-                            priceSpan.textContent = "Prices for 2025 available soon";
+                            priceSpan.textContent = "Prezzi per il 2025 disponibili prossimamente";
                             currencySpan.textContent = "";
                             priceDisplay.style.display = 'block';
                         } else if (price) {
@@ -584,7 +581,7 @@
                     if (location && category) {
                         const price = prices[location]?.[membership]?.[category];
                         if (price === null) {
-                            priceSpan.textContent = "Prices for 2025 available soon";
+                            priceSpan.textContent = "Prezzi per il 2025 disponibili prossimamente";
                             currencySpan.textContent = "";
                             priceDisplay.style.display = 'block';
                         } else if (price) {
@@ -605,65 +602,63 @@
             const submitButton = wrapper.querySelector("#submit-button");
 
             submitButton.addEventListener("click", function () {
-    const nameField = wrapper.querySelector("#name");
-    const emailField = wrapper.querySelector("#email");
-    const messageField = wrapper.querySelector("#message");
-    const locationField = wrapper.querySelector("#location");
-    const membershipField = wrapper.querySelector("#membership");
-    const categoryField = wrapper.querySelector("#category");
-    const packageField = wrapper.querySelector("#package");
-    const priceField = priceSpan.textContent;
-    const currencyField = currencySpan.textContent;
-    const leadSourceField = wrapper.querySelector("#lead-source");
+                const nameField = wrapper.querySelector("#name");
+                const emailField = wrapper.querySelector("#email");
+                const messageField = wrapper.querySelector("#message");
+                const locationField = wrapper.querySelector("#location");
+                const membershipField = wrapper.querySelector("#membership");
+                const categoryField = wrapper.querySelector("#category");
+                const packageField = wrapper.querySelector("#package");
+                const priceField = priceSpan.textContent;
+                const currencyField = currencySpan.textContent;
+                const leadSourceField = wrapper.querySelector("#lead-source");
 
-    // Basic validation
-    if (!nameField.value.trim() || !emailField.value.trim()) {
-        // Display errors (optional inline error handling can be added here)
-        return;
-    }
+                // Basic validation
+                if (!nameField.value.trim() || !emailField.value.trim()) {
+                    // Display errors (optional inline error handling can be added here)
+                    return;
+                }
 
-    // Data to send
-    const formData = {
-        name: nameField.value.trim(),
-        email: emailField.value.trim(),
-        message: messageField ? messageField.value.trim() : "",
-        location: locationField.value,
-        membership: membershipField.value,
-        category: categoryField ? categoryField.value : "",
-        package: packageField ? packageField.value : "",
-        price: priceField ? priceField : "",
-        currency: currencyField ? currencyField : "",
-        lead_source: leadSourceField.value
-    };
+                // Data to send
+                const formData = {
+                    name: nameField.value.trim(),
+                    email: emailField.value.trim(),
+                    message: messageField ? messageField.value.trim() : "",
+                    location: locationField.value,
+                    membership: membershipField.value,
+                    category: categoryField ? categoryField.value : "",
+                    package: packageField ? packageField.value : "",
+                    price: priceField ? priceField : "",
+                    currency: currencyField ? currencyField : "",
+                    lead_source: leadSourceField.value
+                };
 
-    // Send to Make.com webhook
-    fetch("https://hook.eu2.make.com/yh6gymw330shtcvjgiszzw1iyyozezbl", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-    }).then(response => {
-        if (response.ok) {
-            console.log("Form data sent to Make.com successfully.");
-        } else {
-            console.error("Failed to send form data to Make.com.");
-        }
-    }).catch(error => console.error("Error sending data to Make.com:", error));
+                // Send to Make.com webhook
+                fetch("https://hook.eu2.make.com/yh6gymw330shtcvjgiszzw1iyyozezbl", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                }).then(response => {
+                    if (response.ok) {
+                        console.log("Dati del modulo inviati a Make.com con successo.");
+                    } else {
+                        console.error("Invio dei dati del modulo a Make.com fallito.");
+                    }
+                }).catch(error => console.error("Errore durante l'invio dei dati a Make.com:", error));
 
-    // Continue with EmailJS logic
-    emailjs.send("service_bp6qapf", "template_oymlxox", formData).then(
-        function () {
-            contactForm.style.display = 'none';
-            confirmation.style.display = 'block';
-        },
-        function (error) {
-            console.error("Failed to send email:", error);
-        }
-    );
-});
-
-
+                // Continue with EmailJS logic
+                emailjs.send("service_bp6qapf", "template_oymlxox", formData).then(
+                    function () {
+                        contactForm.style.display = 'none';
+                        confirmation.style.display = 'block';
+                    },
+                    function (error) {
+                        console.error("Invio dell'email fallito:", error);
+                    }
+                );
+            });
 
             locationSelect.addEventListener('change', updateCategories);
             membershipSelect.addEventListener('change', updateCategories);
